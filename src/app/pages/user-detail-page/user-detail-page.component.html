@@ -1,0 +1,19 @@
+<div class="page-container">
+  <div class="header-actions">
+    <button class="back-button" (click)="goBack()">← Back to Users</button>
+    <div class="action-buttons">
+      <a *ngIf="user" [routerLink]="['/user', user.id, 'edit']" class="edit-button">Edit User</a>
+      <button *ngIf="user" class="delete-button" (click)="deleteUser()">Delete User</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Loading user details...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <app-user-detail *ngIf="user && !loading && !error" [user]="user"></app-user-detail>
+</div> 

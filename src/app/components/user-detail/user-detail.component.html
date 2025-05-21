@@ -1,0 +1,68 @@
+<div class="user-detail" *ngIf="user">
+  <div class="header">
+    <h2>{{ user.name }}</h2>
+    <span class="username">{{ '@' + user.username }}</span>
+  </div>
+
+  <div class="section">
+    <h3>Contact Information</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <strong>Email:</strong>
+        <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+      </div>
+      <div class="info-item">
+        <strong>Phone:</strong>
+        <span>{{ user.phone }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Website:</strong>
+        <a [href]="'https://' + user.website" target="_blank">{{ user.website }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Address</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <strong>Street:</strong>
+        <span>{{ user.address.street }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Suite:</strong>
+        <span>{{ user.address.suite }}</span>
+      </div>
+      <div class="info-item">
+        <strong>City:</strong>
+        <span>{{ user.address.city }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Zipcode:</strong>
+        <span>{{ user.address.zipcode }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Location:</strong>
+        <span>{{ user.address.geo.lat }}, {{ user.address.geo.lng }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Company</h3>
+    <div class="info-grid">
+      <div class="info-item">
+        <strong>Name:</strong>
+        <span>{{ user.company.name }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Catch Phrase:</strong>
+        <span>{{ user.company.catchPhrase }}</span>
+      </div>
+      <div class="info-item">
+        <strong>Business:</strong>
+        <span>{{ user.company.bs }}</span>
+      </div>
+    </div>
+  </div>
+</div>

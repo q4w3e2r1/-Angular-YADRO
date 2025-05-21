@@ -1,6 +1,18 @@
 <div class="container">
-  <h1>Users List</h1>
-  <div class="users-grid">
+  <div class="header">
+    <h1>Users List</h1>
+    <a [routerLink]="['/user/new']" class="create-button">Create New User</a>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    Loading users...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" class="users-grid">
     <a *ngFor="let user of users" 
        [routerLink]="['/user', user.id]"
        class="user-card">
@@ -12,6 +24,4 @@
       <p><strong>Address:</strong> {{ user.address.street }}, {{ user.address.city }}</p>
     </a>
   </div>
-</div>
-
-<router-outlet></router-outlet>
+</div> 
