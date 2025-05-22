@@ -26,33 +26,61 @@ export class UserFormComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('Initial user data:', this.user);
     this.isEditMode = !!this.user;
     this.initForm();
   }
 
   private initForm() {
+    const initialValues = {
+      name: this.user?.name || '',
+      username: this.user?.username || '',
+      email: this.user?.email || '',
+      phone: this.user?.phone || '',
+      website: this.user?.website || '',
+      address: {
+        street: this.user?.address?.street || '',
+        suite: this.user?.address?.suite || '',
+        city: this.user?.address?.city || '',
+        zipcode: this.user?.address?.zipcode || '',
+        geo: {
+          lat: this.user?.address?.geo?.lat || '',
+          lng: this.user?.address?.geo?.lng || ''
+        }
+      },
+      company: {
+        name: this.user?.company?.name || '',
+        catchPhrase: this.user?.company?.catchPhrase || '',
+        bs: this.user?.company?.bs || ''
+      }
+    };
+
+    console.log('Form initial values:', initialValues);
+
     this.userForm = this.fb.group({
-      name: [this.user?.name || '', [Validators.required]],
-      username: [this.user?.username || '', [Validators.required]],
-      email: [this.user?.email || '', [Validators.required, Validators.email]],
-      phone: [this.user?.phone || ''],
-      website: [this.user?.website || ''],
+      name: [initialValues.name, [Validators.required]],
+      username: [initialValues.username, [Validators.required]],
+      email: [initialValues.email, [Validators.required, Validators.email]],
+      phone: [initialValues.phone],
+      website: [initialValues.website],
       address: this.fb.group({
-        street: [this.user?.address.street || '', [Validators.required]],
-        suite: [this.user?.address.suite || ''],
-        city: [this.user?.address.city || '', [Validators.required]],
-        zipcode: [this.user?.address.zipcode || '', [Validators.required]],
+        street: [initialValues.address.street, [Validators.required]],
+        suite: [initialValues.address.suite],
+        city: [initialValues.address.city, [Validators.required]],
+        zipcode: [initialValues.address.zipcode, [Validators.required]],
         geo: this.fb.group({
-          lat: [this.user?.address.geo.lat || ''],
-          lng: [this.user?.address.geo.lng || '']
+          lat: [initialValues.address.geo.lat],
+          lng: [initialValues.address.geo.lng]
         })
       }),
       company: this.fb.group({
-        name: [this.user?.company.name || '', [Validators.required]],
-        catchPhrase: [this.user?.company.catchPhrase || ''],
-        bs: [this.user?.company.bs || '']
+        name: [initialValues.company.name, [Validators.required]],
+        catchPhrase: [initialValues.company.catchPhrase],
+        bs: [initialValues.company.bs]
       })
     });
+
+    console.log('Form values after initialization:', this.userForm.value);
   }
 
   isFieldInvalid(fieldPath: string): boolean {
@@ -77,11 +105,15 @@ export class UserFormComponent implements OnInit {
       this.error = null;
       const formValue = this.userForm.value;
       
+      console.log('Submitting form with values:', formValue);
+      
       if (this.isEditMode && this.user) {
         const updatedUser = {
           ...this.user,
           ...formValue
         };
+        
+        console.log('Updating user with data:', updatedUser);
         
         this.userService.updateUser(this.user.id, updatedUser).subscribe({
           next: () => {

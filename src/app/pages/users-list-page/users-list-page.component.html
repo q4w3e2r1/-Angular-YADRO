@@ -1,27 +1,73 @@
 <div class="container">
-  <div class="header">
-    <h1>Users List</h1>
-    <a [routerLink]="['/user/new']" class="create-button">Create New User</a>
-  </div>
+  <nz-spin [nzSpinning]="loading">
+    <div class="header">
+      <h1>Users List</h1>
+      <div class="controls">
+        <nz-input-group nzPrefixIcon="search">
+          <input 
+            nz-input
+            [(ngModel)]="searchTerm" 
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search by name or email..."
+          >
+        </nz-input-group>
+        
+        <button 
+          nz-button 
+          nzType="primary"
+          (click)="toggleSort()"
+          [nzType]="isSorted ? 'primary' : 'default'">
+          <span nz-icon nzType="arrow-up"></span>
+          {{ isSorted ? 'Sorted by Name' : 'Sort by Name' }}
+        </button>
 
-  <div *ngIf="loading" class="loading">
-    Loading users...
-  </div>
+        <a nz-button nzType="primary" [routerLink]="['/user/new']">
+          <span nz-icon nzType="plus"></span>
+          Create New User
+        </a>
+      </div>
+    </div>
 
-  <div *ngIf="error" class="error">
-    {{ error }}
-  </div>
+    <nz-alert
+      *ngIf="error"
+      nzType="error"
+      nzMessage="Error"
+      [nzDescription]="error"
+      nzShowIcon>
+    </nz-alert>
 
-  <div *ngIf="!loading && !error" class="users-grid">
-    <a *ngFor="let user of users" 
-       [routerLink]="['/user', user.id]"
-       class="user-card">
-      <h2>{{ user.name }}</h2>
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>Phone:</strong> {{ user.phone }}</p>
-      <p><strong>Company:</strong> {{ user.company.name }}</p>
-      <p><strong>Address:</strong> {{ user.address.street }}, {{ user.address.city }}</p>
-    </a>
-  </div>
+    <div *ngIf="!loading && !error" class="content">
+      <nz-row [nzGutter]="[16, 16]">
+        <nz-col 
+          *ngFor="let user of paginatedUsers" 
+          [nzXs]="24" 
+          [nzSm]="12" 
+          [nzMd]="8" 
+          [nzLg]="6">
+          <a [routerLink]="['/user', user.id]">
+            <nz-card 
+              [nzHoverable]="true"
+              [nzTitle]="user.name"
+              class="user-card">
+              <p><strong>Username:</strong> {{ user.username }}</p>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+              <p><strong>Phone:</strong> {{ user.phone }}</p>
+              <p><strong>Company:</strong> {{ user.company.name }}</p>
+              <p><strong>Address:</strong> {{ user.address.street }}, {{ user.address.city }}</p>
+            </nz-card>
+          </a>
+        </nz-col>
+      </nz-row>
+
+      <nz-pagination
+        *ngIf="totalPages > 1"
+        class="pagination"
+        [nzPageIndex]="currentPage"
+        [nzTotal]="filteredUsers.length"
+        [nzPageSize]="itemsPerPage"
+        (nzPageIndexChange)="onPageIndexChange($event)"
+        nzShowSizeChanger="false">
+      </nz-pagination>
+    </div>
+  </nz-spin>
 </div> 
